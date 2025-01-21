@@ -1,0 +1,19 @@
+[submodule "third_party/libevent"]
+	path = third_party/libevent
+	url = git@github.com:libevent/libevent.git
+	commit = 5df3037 # release-2.1.12-stable https://github.com/libevent/libevent/releases/tag/release-2.1.12-stable
+[submodule "third_party/openssl"]
+	path = third_party/openssl
+	url = git@github.com:openssl/openssl.git
+	commit = db2ac4f # openssl 3.3.1 https://github.com/openssl/openssl/releases/tag/openssl-3.3.1
+[submodule "third_party/fmt"]
+	path = third_party/fmt
+	url = git@github.com:fmtlib/fmt.git
+	commit = b50e685 # fmt 11.0.1 https://github.com/fmtlib/fmt/releases/tag/11.0.1
+[submodule "third_party/libcgroup"]
+	path = third_party/libcgroup
+	url = git@github.com:libcgroup/libcgroup.git
+	commit = 16a657c # libcgroup v3.1.0 https://github.com/libcgroup/libcgroup/releases/tag/v3.1.0
+[submodule "third_party/spdlog"]
+	path = third_party/spdlog
+	url = https://github.com/gabime/spdlog.git
