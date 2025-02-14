@@ -42,7 +42,7 @@ bool EventLoop::updateChannel(const std::shared_ptr<EventChannel> &channel) {
   } else {
     channels[fd] = channel;
   }
-  channel->eventSet(shared_from_this());
+  channel->eventSet(this);
   return true;
 }
 

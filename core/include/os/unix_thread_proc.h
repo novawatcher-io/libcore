@@ -19,8 +19,8 @@ class UnixThread;
 class UnixThreadProc {
 
 public:
-  explicit UnixThreadProc(const std::shared_ptr<Event::EventLoop> &loop_,
-                          const std::shared_ptr<OS::UnixThread> &thread_)
+  explicit UnixThreadProc(Event::EventLoop* loop_,
+                         OS::UnixThread* thread_)
       : loop(loop_), thread(thread_) {}
 
   /**
@@ -30,8 +30,8 @@ public:
   void runThread();
 
 private:
-  std::shared_ptr<Event::EventLoop> loop;
-  std::shared_ptr<OS::UnixThread> thread;
+ Event::EventLoop* loop;
+ OS::UnixThread* thread;
 };
 } // namespace OS
 } // namespace Core

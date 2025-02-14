@@ -21,7 +21,7 @@ typedef std::function<void(EventChannel *channel)> EventNoBufferCallable;
 class EventNoBufferChannel : public EventChannel, public Core::Noncopyable {
 public:
 
-    EventNoBufferChannel(const std::shared_ptr<EventLoop> &loop_, int fd, bool auto_close_ = true);
+    EventNoBufferChannel(EventLoop* loop_, int fd, bool auto_close_ = true);
 
     /**
      * @brief Set the On Read Callable object
@@ -283,7 +283,7 @@ public:
 //        return time;
 //    }
 
-    bool eventSet(const std::shared_ptr<EventLoop> &loop) override;
+    bool eventSet(EventLoop* loop);
 
     virtual ~EventNoBufferChannel() override {
         int ret = event_del(ptr.get());

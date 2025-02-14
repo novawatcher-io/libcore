@@ -12,7 +12,7 @@ class UnixThread;
 
 namespace Core::OS::UnixCurrentThread {
 thread_local int t_cachedTid = 0;
-thread_local std::shared_ptr<Event::EventLoop> currentLoop;
-thread_local std::shared_ptr<UnixThread> currentThread;
+thread_local Event::EventLoop* currentLoop;
+thread_local UnixThread* currentThread;
 
 }  // namespace Core::OS::UnixCurrentThread

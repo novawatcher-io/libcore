@@ -6,6 +6,7 @@
 #include <event2/event_compat.h>
 #include <memory>
 #include <spdlog/spdlog.h>
+#include <iostream>
 #include <unordered_map>
 #include <utility>
 struct bufferevent; // IWYU pragma: keep
@@ -26,9 +27,13 @@ using SignalSlot = std::unordered_map<int, EventPtr>;
  * @brief
  *
  */
-class EventLoop : public std::enable_shared_from_this<EventLoop> {
+class EventLoop {
 public:
   EventLoop() : base(event_init()) {}
+
+  ~EventLoop() {
+    std::cout << "~EventLoop" << std::endl;
+  }
 
   /**
    * 获取基址

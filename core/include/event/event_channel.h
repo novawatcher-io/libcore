@@ -18,10 +18,10 @@ namespace Core::Event {
 
 class EventChannel : public std::enable_shared_from_this<EventChannel> {
 public:
-  EventChannel(const std::shared_ptr<EventLoop> &loop_, int fd_, bool auto_close = true)
+  EventChannel(EventLoop* loop_, int fd_, bool auto_close = true)
       : auto_close_(auto_close), loop(loop_), fd(fd_) {}
 
-  virtual bool eventSet(const std::shared_ptr<EventLoop> & /*loop*/) { return true; }
+  virtual bool eventSet(EventLoop* /*loop*/) { return true; }
 
   /**
    * @brief 获取channel的fd
@@ -83,7 +83,7 @@ protected:
    * @brief 事件循环
    *
    */
-  std::shared_ptr<EventLoop> loop;
+  EventLoop* loop;
 
   /**
    * 这是为了保护channel 存活的

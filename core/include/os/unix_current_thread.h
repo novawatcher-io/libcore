@@ -14,9 +14,9 @@ namespace UnixCurrentThread {
 
 extern thread_local int t_cachedTid;
 
-extern thread_local std::shared_ptr<Core::Event::EventLoop> currentLoop;
+extern thread_local Core::Event::EventLoop* currentLoop;
 
-extern thread_local std::shared_ptr<UnixThread> currentThread;
+extern thread_local UnixThread* currentThread;
 
 
 inline int tid() {
@@ -27,17 +27,13 @@ inline int tid() {
 }
 
 inline Event::EventLoop *loop() {
-    return currentLoop.get();
-}
-
-inline std::shared_ptr<Event::EventLoop> &loopSmartPtr() {
     return currentLoop;
 }
 
 void setCurrentThread(std::shared_ptr<UnixThread> &thread_);
 
 
-inline std::shared_ptr<UnixThread> &getThread() {
+inline UnixThread* getThread() {
     return currentThread;
 }
 }

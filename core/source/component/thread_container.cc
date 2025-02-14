@@ -25,14 +25,14 @@ void UnixThreadContainer::stop() {
     }
 }
 
-bool UnixThreadContainer::reg(pid_t index, const std::shared_ptr<OS::UnixThread>& thread) {
+bool UnixThreadContainer::reg(pid_t index, std::unique_ptr<OS::UnixThread>& thread) {
     auto iter = container.find(index);
     if (iter != container.end()) {
         SPDLOG_ERROR("Thread has been registered!");
         return false;
     }
 
-    container[index] = thread;
+    container[index] = std::move(thread);
     return true;
 }
 
@@ -53,7 +53,7 @@ void UnixThreadContainer::broadcastEvent(const Event::Task& task) {
     }
 }
 
-std::shared_ptr<OS::UnixThread>& UnixThreadContainer::getThread(int index) {
+std::unique_ptr<OS::UnixThread>& UnixThreadContainer::getThread(int index) {
      auto iter = container.find(index);
      if (iter == container.end()) {
          return empty;

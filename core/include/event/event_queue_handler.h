@@ -13,7 +13,7 @@ namespace Core::Event {
 
 class EventQueueHandler {
 public:
-  explicit EventQueueHandler(const std::shared_ptr<OS::UnixThread> &threadObject)
+  explicit EventQueueHandler(OS::UnixThread* threadObject)
       : queue(std::make_unique<EventQueue>(threadObject)){};
 
   /**

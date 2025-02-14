@@ -19,7 +19,7 @@ typedef std::function<void(struct bufferevent *bev, EventChannel *ctx)> EventCal
 
 class EventBufferChannel : public EventChannel, public Core::Noncopyable {
  public:
-  EventBufferChannel(const std::shared_ptr<EventLoop> &loop_, int fd)
+  EventBufferChannel(EventLoop* loop_, int fd)
       : EventChannel(loop_, fd), bufptr(bufferevent_socket_new(loop->getEventBase(), this->getChannelFd(), 0)) {}
 
   /**
@@ -262,7 +262,7 @@ class EventBufferChannel : public EventChannel, public Core::Noncopyable {
    */
   void update();
 
-  bool eventSet(const std::shared_ptr<EventLoop> &loop) override;
+  bool eventSet(EventLoop* loop) override;
 
   //    /**
   //     * @brief Get the Timer object

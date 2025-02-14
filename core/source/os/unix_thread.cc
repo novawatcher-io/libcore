@@ -17,14 +17,14 @@ namespace Core {
 namespace OS {
 
 UnixThread::UnixThread() :
-loop((std::make_shared<Event::EventLoop>())),
+loop((std::make_unique<Event::EventLoop>())),
 daemonize(false),
 mTerminated(false),
 isSuspend(false),
 mRunStatus(false),
 wakeupChannelFd(createChannelFd()) {}
 
-int UnixThread::ThreadProc(std::unique_ptr<UnixThreadProc> proc, const std::shared_ptr<UnixThread>& object) {
+int UnixThread::ThreadProc(std::unique_ptr<UnixThreadProc> proc, UnixThread* object) {
     if (!object->getName().empty()) {
         OS::set_thread_name(object->getName().c_str());
     }
@@ -41,7 +41,7 @@ void UnixThread::stop() {
           return;
         }
     }
-    queue->pushTask(std::bind(&Event::EventLoop::quit, loop));
+    queue->pushTask(std::bind(&Event::EventLoop::quit, loop.get()));
 
     if (((!daemonize))) {
         {
@@ -71,15 +71,15 @@ ssize_t UnixThread::wakeUp() {
 
 bool UnixThread::start() {
     // //构建队列
-    queue = std::make_shared<Event::EventQueueHandler>(shared_from_this());
+    queue = std::make_unique<Event::EventQueueHandler>(this);
 
     if (build_unlikely(wakeupChannelFd == -1)) {
         SPDLOG_ERROR("wakeupChannelFd create failed!");
         exit(-1);
     }
 
-    std::unique_ptr<UnixThreadProc> proc = std::make_unique<UnixThreadProc>(loop, shared_from_this());
-    channel = std::make_shared<Event::EventBufferChannel>(loop, wakeupChannelFd);
+    std::unique_ptr<UnixThreadProc> proc = std::make_unique<UnixThreadProc>(loop.get(), this);
+    channel = std::make_shared<Event::EventBufferChannel>(loop.get(), wakeupChannelFd);
     channel->setEvents(EV_PERSIST);
     channel->setOnReadCallable(([this](auto && PH1, auto && PH2)
     {
@@ -91,7 +91,7 @@ bool UnixThread::start() {
     });
     // //开启读取事件
     channel->enableReading(-1);
-    threadHandle = std::make_unique<std::thread>(ThreadProc, std::move(proc), shared_from_this());
+    threadHandle = std::make_unique<std::thread>(ThreadProc, std::move(proc), this);
 
     mRunStatus = true;
     return true;

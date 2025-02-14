@@ -13,7 +13,7 @@ namespace Component {
 class UdpServerChannel :public OS::UnixUdpServer, public  Event::EventNoBufferChannel {
 
 public:
-    UdpServerChannel(const std::shared_ptr<Event::EventLoop> &loop_, const std::string& ip, uint16_t port) 
+    UdpServerChannel(Event::EventLoop* &loop_, const std::string& ip, uint16_t port)
     :OS::UnixUdpServer(ip, port)
     ,Event::EventNoBufferChannel(loop_, getFd()) {
         

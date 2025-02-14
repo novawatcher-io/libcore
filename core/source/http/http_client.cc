@@ -304,7 +304,7 @@ void HttpClient::init() {
             throw std::runtime_error("SSL_new(" + requestUrl + ") error");
         }
 
-        bev = bufferevent_openssl_socket_new(OS::UnixCurrentThread::loopSmartPtr()->getEventBase(), -1, ssl.get(),
+        bev = bufferevent_openssl_socket_new(OS::UnixCurrentThread::loop()->getEventBase(), -1, ssl.get(),
                                              BUFFEREVENT_SSL_CONNECTING,
                                              BEV_OPT_DEFER_CALLBACKS);
 
@@ -315,7 +315,7 @@ void HttpClient::init() {
         bufferevent_openssl_set_allow_dirty_shutdown(bev, 1);
 
     } else {
-        bev = bufferevent_socket_new(OS::UnixCurrentThread::loopSmartPtr()->getEventBase(), -1, 0);
+        bev = bufferevent_socket_new(OS::UnixCurrentThread::loop()->getEventBase(), -1, 0);
 
         if (build_unlikely(!bev)) {
             throw std::runtime_error("bev get nullptr(" +requestUrl+ ")");
@@ -325,7 +325,7 @@ void HttpClient::init() {
 
 
 
-    conn .Reset(evhttp_connection_base_bufferevent_new(OS::UnixCurrentThread::loopSmartPtr()->getEventBase(), nullptr,
+    conn .Reset(evhttp_connection_base_bufferevent_new(OS::UnixCurrentThread::loop()->getEventBase(), nullptr,
           bev, host, port));
 
     if (build_unlikely(!conn.get())) {

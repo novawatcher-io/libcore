@@ -9,7 +9,7 @@
 
 namespace Core::Component {
 
-using containerMap = std::unordered_map<pid_t, std::shared_ptr<OS::UnixThread>>;
+using containerMap = std::unordered_map<pid_t, std::unique_ptr<OS::UnixThread>>;
 
 /**
  * @brief 线程容器，用来存储线程
@@ -23,7 +23,7 @@ public:
    * @brief 注册线程
    *
    */
-  bool reg(pid_t index, const std::shared_ptr<OS::UnixThread> &thread);
+  bool reg(pid_t index, std::unique_ptr<OS::UnixThread> &thread);
 
   /**
    * @brief 启动线程容器
@@ -43,7 +43,7 @@ public:
    * @param index
    * @return const std::shared_ptr<UnixThread>&
    */
-  std::shared_ptr<OS::UnixThread> &getThread(int index);
+  std::unique_ptr<OS::UnixThread> &getThread(int index);
 
   /**
    * @brief 获取容器
@@ -57,7 +57,7 @@ public:
   uint16_t size() { return container.size(); }
 
 private:
-  std::shared_ptr<OS::UnixThread> empty;
+  std::unique_ptr<OS::UnixThread> empty;
   // 线程派遣管理器
   containerMap container;
 };

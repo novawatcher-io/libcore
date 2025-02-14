@@ -8,7 +8,7 @@ struct bufferevent;
 
 namespace Core::Event {
 
-EventNoBufferChannel::EventNoBufferChannel(const std::shared_ptr<EventLoop> &loop_, int fd, bool auto_close_)
+EventNoBufferChannel::EventNoBufferChannel(EventLoop* loop_, int fd, bool auto_close_)
     : EventChannel(loop_, fd, auto_close_){};
 
 void EventNoBufferChannel::update() { loop->updateChannel(shared_from_this()); }
@@ -24,7 +24,7 @@ void EventNoBufferChannel::onEvent(int /*fd*/, short events, void *arg) {
   channel->handelEvent(events);
 }
 
-bool EventNoBufferChannel::eventSet(const std::shared_ptr<EventLoop> &loop) {
+bool EventNoBufferChannel::eventSet(EventLoop* loop) {
   int ret = 0;
   if (!events) {
     SPDLOG_WARN("events is nullptr");

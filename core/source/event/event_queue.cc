@@ -8,7 +8,7 @@
 
 namespace Core::Event {
 
-    EventQueue::EventQueue(const std::shared_ptr<OS::UnixThread> &threadObject) : thread(threadObject) {};
+    EventQueue::EventQueue(OS::UnixThread* threadObject) : thread(threadObject) {};
 
     bool EventQueue::pushTask(const Task &task) {
         if (build_unlikely((OS::UnixCurrentThread::tid() == thread->getTid()))) {

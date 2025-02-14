@@ -1,4 +1,5 @@
 #pragma once
+#include "event/event_loop.h"
 #include "build_expect.h"              // for build_likely
 #include "event/event_queue.h"         // for Task
 #include "event/event_queue_handler.h" // for EventQueueHandler
@@ -11,6 +12,7 @@
 #include <sys/eventfd.h>               // for eventfd, EFD_CLOEXEC, EFD_NON...
 #include <sys/types.h>                 // for pid_t, ssize_t
 #include <thread>                      // for thread
+#include <iostream>
 namespace Core {
 namespace Event {
 class EventBufferChannel;
@@ -35,7 +37,7 @@ using InitCallable = std::function<void()>;
  * @brief
  * 基本的线程单元，在线程之上的封装
  */
-class UnixThread : public Core::Noncopyable, public std::enable_shared_from_this<UnixThread> {
+class UnixThread : public Core::Noncopyable {
 public:
   UnixThread();
 
@@ -74,7 +76,6 @@ public:
     queue.reset();
     channel.reset();
     loop.reset();
-    shared_from_this().reset();
   }
 
   virtual void resume() { return; }
@@ -99,7 +100,7 @@ public:
   virtual pid_t getTid() { return tid; }
 
   // 获取线程内部的事件循环
-  virtual const std::shared_ptr<Event::EventLoop> &getEventLoop() { return loop; }
+  virtual const std::unique_ptr<Event::EventLoop> &getEventLoop() { return loop; }
 
   /**
    * 事件唤醒
@@ -128,7 +129,7 @@ protected:
    * 这里采用shared_ptr,而不是采用unique_ptr,event loop 主要是因为
    * stop 会往子线程发送消息，会触发闭包，std::bind 所以要用shared_ptr
    */
-  std::shared_ptr<Event::EventLoop> loop;
+  std::unique_ptr<Event::EventLoop> loop;
 
 private:
   /**
@@ -148,7 +149,7 @@ private:
    * @param arg
    * @return
    */
-  static int ThreadProc(std::unique_ptr<UnixThreadProc> proc, const std::shared_ptr<UnixThread> &object);
+  static int ThreadProc(std::unique_ptr<UnixThreadProc> proc, UnixThread* object);
 
   /**
    * @brief 创建管道的通讯描述符
@@ -192,7 +193,7 @@ private:
   std::shared_ptr<Event::EventBufferChannel> channel;
 
   // 消息队列
-  std::shared_ptr<Event::EventQueueHandler> queue;
+  std::unique_ptr<Event::EventQueueHandler> queue;
 
   // 线程句柄
   std::unique_ptr<std::thread> threadHandle;

@@ -17,7 +17,7 @@ typedef std::function<void()> Task;
 
 class EventQueue : public Core::Noncopyable {
 public:
-    explicit EventQueue(const std::shared_ptr<OS::UnixThread> &threadObject);
+    explicit EventQueue(OS::UnixThread* threadObject);
 
     /**
      * @brief 投递任务
@@ -51,7 +51,7 @@ private:
      * @brief 线程
      *
      */
-    std::shared_ptr<OS::UnixThread> thread;
+    OS::UnixThread* thread;
 };
 }
 }
