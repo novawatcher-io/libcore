@@ -20,7 +20,6 @@ void UnixThreadProc:: runThread() {
   }
   loop->loop();
   for (auto &data : thread->finishList) {
-    printf("111111111\n");
     SPDLOG_INFO("thread {} finish callable", UnixCurrentThread::tid());
     data();
   }
