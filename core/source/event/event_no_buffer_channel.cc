@@ -75,7 +75,7 @@ bool EventNoBufferChannel::handelEvent(short events) {
   }
 
   if (events & EV_TIMEOUT) {
-    SPDLOG_DEBUG("EV_TIMEOUT ticker")
+    SPDLOG_DEBUG("EV_TIMEOUT ticker");
   }
 
   return true;
