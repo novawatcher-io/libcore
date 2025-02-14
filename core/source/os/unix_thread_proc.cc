@@ -11,7 +11,7 @@ namespace Core::OS {
  * @brief
  * 线程运行的具体处理入口
  */
-void UnixThreadProc::runThread() {
+void UnixThreadProc:: runThread() {
   UnixCurrentThread::currentLoop = loop;
   UnixCurrentThread::currentThread = thread;
   SPDLOG_INFO("thread {} start", UnixCurrentThread::tid());
@@ -19,5 +19,8 @@ void UnixThreadProc::runThread() {
     data();
   }
   loop->loop();
+  for (auto &data : thread->finishList) {
+    data();
+  }
 }
 } // namespace Core::OS

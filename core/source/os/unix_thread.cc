@@ -35,10 +35,26 @@ int UnixThread::ThreadProc(std::unique_ptr<UnixThreadProc> proc, const std::shar
 }
 
 void UnixThread::stop() {
+    {
+        std::lock_guard guard(mtx);
+        if (!mRunStatus) {
+          return;
+        }
+    }
     queue->pushTask(std::bind(&Event::EventLoop::quit, loop));
-    if ((mRunStatus) && ((!daemonize))) {
+
+    if (((!daemonize))) {
+        {
+          std::lock_guard guard(mtx);
+          if (!mRunStatus) {
+            return;
+          }
+        }
         join();
-        mRunStatus = false;
+        {
+          std::lock_guard guard(mtx);
+          mRunStatus = false;
+        }
     }
 }
 
@@ -69,6 +85,10 @@ bool UnixThread::start() {
     {
         std::cout << "onTask" << std::endl;
         queue->dispatchTask(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2)); }));
+    // 处理完成没有结束的任务
+    addFinishCallable([this]{
+      queue->call();
+    });
     // //开启读取事件
     channel->enableReading(-1);
     threadHandle = std::make_unique<std::thread>(ThreadProc, std::move(proc), shared_from_this());

@@ -89,6 +89,8 @@ public:
 
   virtual void addInitCallable(const InitCallable &callable) { initList.push_back(callable); }
 
+  virtual void addFinishCallable(const InitCallable &callable) { finishList.push_back(callable); }
+
   /**
    * @brief 获取当前线程id
    *
@@ -108,7 +110,13 @@ public:
    * @brief 处理任务的回调
    *
    */
-  virtual bool addTask(const Core::Event::Task &task) { return queue->pushTask(task); }
+  virtual bool addTask(const Core::Event::Task &task) {
+    std::lock_guard<std::mutex> guard(mtx);
+    if (!mRunStatus) {
+      return false;
+    }
+    return queue->pushTask(task);
+  }
 
   void setName(const std::string &name_) { name = name_; }
 
@@ -189,11 +197,15 @@ private:
   // 线程句柄
   std::unique_ptr<std::thread> threadHandle;
 
+  std::list<InitCallable> finishList;
+
   // 线程id
   pid_t tid = 0;
 
   // 名字
   std::string name;
+
+  std::mutex mtx;
 
   // 管道的fd
   int wakeupChannelFd = -1;

@@ -29,6 +29,14 @@ public:
    */
   void dispatchTask(struct bufferevent *bev, Event::EventChannel *channel);
 
+  /**
+   * @brief 任务处理
+   *
+   */
+  void call() {
+    queue->dispatchTask();
+  }
+
 private:
   std::unique_ptr<EventQueue> queue;
 };
