@@ -288,9 +288,8 @@ public:
     virtual ~EventNoBufferChannel() override {
         int ret = event_del(ptr.get());
         if (ret == 0) {
-            std::cout << "event_del success" << std::endl;
+          SPDLOG_DEBUG("event_del success");
         }
-        std::cout << "~EventNoBufferChannel" << std::endl;
     }
 
 private:

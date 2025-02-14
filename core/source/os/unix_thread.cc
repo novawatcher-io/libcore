@@ -83,7 +83,6 @@ bool UnixThread::start() {
     channel->setEvents(EV_PERSIST);
     channel->setOnReadCallable(([this](auto && PH1, auto && PH2)
     {
-        std::cout << "onTask" << std::endl;
         queue->dispatchTask(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2)); }));
     // 处理完成没有结束的任务
     addFinishCallable([this]{

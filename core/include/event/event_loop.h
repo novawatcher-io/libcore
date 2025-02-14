@@ -32,7 +32,6 @@ public:
   EventLoop() : base(event_init()) {}
 
   ~EventLoop() {
-    std::cout << "~EventLoop" << std::endl;
   }
 
   /**
