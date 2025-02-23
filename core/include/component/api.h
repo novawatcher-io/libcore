@@ -152,6 +152,8 @@ public:
 
     virtual void push(std::unique_ptr<EventData> e) PURE;
 
+    virtual void stop() PURE;
+
     virtual void flush() PURE;
     virtual ~Pipeline() = default;
 };
