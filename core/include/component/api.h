@@ -130,6 +130,8 @@ public:
 
     virtual Result  Consume(Batch& batch) PURE;
 
+    virtual void  stop() PURE;
+
     virtual ~Consumer() = default;
 };
 
