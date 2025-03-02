@@ -142,6 +142,8 @@ public:
     virtual Core::Component::Result intercept(Core::Component::Batch& batch) PURE;
 
     virtual ~Interceptor() = default;
+
+    virtual void stop() {};
 };
 
 class Pipeline {
