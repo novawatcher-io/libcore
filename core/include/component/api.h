@@ -144,6 +144,8 @@ public:
     virtual ~Interceptor() = default;
 
     virtual void stop() {};
+
+    virtual void start() {};
 };
 
 class Pipeline {
