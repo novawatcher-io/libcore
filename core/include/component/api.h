@@ -160,6 +160,8 @@ public:
 
     virtual void stop() PURE;
 
+    virtual void start() PURE;
+
     virtual void flush() PURE;
     virtual ~Pipeline() = default;
 };
