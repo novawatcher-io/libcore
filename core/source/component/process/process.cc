@@ -1,7 +1,7 @@
 #include "component/process/process.h"
 #include "component/process/manager.h"
 #include "os/unix_cgroup.h"
-#include <bits/chrono.h>
+#include <chrono>
 #include <cerrno>
 #include <spdlog/spdlog.h>
 #include <sstream>
